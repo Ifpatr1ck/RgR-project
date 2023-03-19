@@ -10,6 +10,20 @@ double e = 2.71828182845904523536;
 
 HWND hwnd = GetConsoleWindow(); //Descripter of Window
 HDC dc = GetDC(hwnd);//Device context - for drawing
+void gotoxy(int xpos, int ypos)
+{
+    COORD scrn;
+    HANDLE hOuput = GetStdHandle(STD_OUTPUT_HANDLE);
+    scrn.X = xpos; scrn.Y = ypos;
+    SetConsoleCursorPosition(hOuput, scrn);
+} // No Lags with moving between menu numbers
+void setcur(int x, int y)//установка курсора на позицию  x y 
+{
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+};
 double f(double x)
 {
     double f1 = pow(e,(-x)) * log(x+1);
@@ -75,10 +89,27 @@ double HordEquation(double a, double b, double c)
     }
     return b;
 } //Solving the Equation by the chord Method #1
+double bisecia(double a, double b, double c)
+{
+    while (abs(Equation(c)) > e)
+    {
+        c = (a + b) / 2;
+        
+        if ((Equation(a) * Equation(c) < 0))
+        {
+            b = c;
+        }
+        else if (Equation(a) * Equation(c) > 0)
+        {
+            a = c;
+        }
+    }
+    return c;
+}
 void BackGround()
 {
     SelectObject(dc, GetStockObject(DC_BRUSH));
-    SetDCBrushColor(dc, RGB(255, 255, 255)); // - цвет заполнителя
+    SetDCBrushColor(dc, RGB(150, 205, 80)); // - цвет заполнителя
     Rectangle(dc, 0, 0, 800, 400);
 } // Background of Animation 
 void Animation()
@@ -150,8 +181,8 @@ void tablica()
 {
     BackGround();
     //Running rectangel
-    int R = 255, G = 255, B = 255;
-    SelectObject(dc, GetStockObject(DC_BRUSH));
+    int R = 50, G = 90, B = 75;
+    SelectObject(dc, GetStockObject(PS_SOLID));
     SetDCBrushColor(dc, RGB(R, G, B)); // - Color of the placeholder
     Rectangle(dc, 10, 10, 100, 100);
     Sleep(10);
@@ -186,17 +217,22 @@ public:
             break;
         }
         // рисуем менюшку
+        //gotoxy(0, 0);
+        setcur(0, 0);
         system("cls");
-        if (Punckt == 1) printf("-| Таблица\n");
-        else             printf("   Таблица\n");
-        if (Punckt == 2) printf("-| График\n");
-        else             printf("   График\n");
-        if (Punckt == 3) printf("-| Уравнение\n");
-        else             printf("   Уравнение\n");
-        if (Punckt == 4) printf("-| Интеграл\n");
-        else             printf("   Интеграл\n");
-        if (Punckt == 5) printf("-| Об авторе\n");
-        else             printf("   Об авторе\n");
+        system("COLOR 35");
+        cout << "\t\t\tРасчетно-графическая работа";
+        if (Punckt == 1) printf("\t\n\t\n--> Таблица\n");
+        else             printf("\t\n\t\n   Таблица\n");
+        if (Punckt == 2) printf("\t\n\t\n--> График\n");
+        else             printf("\t\n\t\n   График\n");
+        if (Punckt == 3) printf("\t\n\t\n--> Уравнение\n");
+        else             printf("\t\n\t\n   Уравнение\n");
+        if (Punckt == 4) printf("\t\n\t\n--> Интеграл\n");
+        else             printf("\t\n\t\n   Интеграл\n");
+        if (Punckt == 5) printf("\t\n\t\n--> Об авторе\n");
+        else             printf("\t\n\t\n   Об авторе\n");
+
     }
 };
 class Table  // таблица 1
@@ -207,6 +243,7 @@ public:
     //Main fuction
     void draw()
     {
+        tablica();
         system("cls");
         printf("Тут могла быть ваша таблица");
     }
@@ -232,8 +269,8 @@ public:
     void draw()
     {
         system("cls");
-        cout << "\n\tКорень уравнения, решенное методом половинного деления равен: " << HalfDivEquation(-150, 170, 0.001);
-        cout << "\n\tКорень уравнения, решенное методом хорд равен: " << method_chord(-150, 170, 0.001);
+        cout << "\n\tКорень уравнения, решенное методом половинного деления равен: " << HalfDivEquation(0.5, 2.5, 0.001);
+        cout << "\n\tКорень уравнения, решенное методом хорд равен: " << bisecia(0.5, 2.5, 0.001);
     }
 };
 class Integral // интеграл 4
@@ -282,7 +319,6 @@ int main()
                 //printf("1");
                 Table tabl;
                 tabl.draw();
-                tablica();
                 break;
             case 2:
                 //printf("2");
