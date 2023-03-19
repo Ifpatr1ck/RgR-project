@@ -5,20 +5,16 @@
 #include <math.h>
 
 using namespace std;
-///Менюшка разделена по пунктам
-///Она переключается как стрелосками там и колесиком мыши
-/// нажатие левой кнопки мыши = энтеру
-/// эскейп = выход или назад
 
 double e = 2.71828182845904523536;
 
-HWND hwnd = GetConsoleWindow(); //Дескриптор окна
-HDC dc = GetDC(hwnd);//Контекст устройства - для рисования
+HWND hwnd = GetConsoleWindow(); //Descripter of Window
+HDC dc = GetDC(hwnd);//Device context - for drawing
 double f(double x)
 {
     double f1 = pow(e,(-x)) * log(x+1);
     return f1;
-} // функция интегралла
+} // Function of Integral
 double trapezoidalIntegral(double a, double b, int n) {
     const double width = (b - a) / n;
 
@@ -31,7 +27,7 @@ double trapezoidalIntegral(double a, double b, int n) {
     }
 
     return trapezoidal_integral;
-} //Решение интегралла методом трапеций
+} //Solving the Integral by the trapezoid method    
 double rectangelIntegral(double a, double b, int n)
 {
     double INTGRL = 0.0;
@@ -40,11 +36,11 @@ double rectangelIntegral(double a, double b, int n)
         INTGRL += f(x - h / 2);
     INTGRL *= h;
     return INTGRL;
-} //Решение интегралла методом прямоугольников
+} //Solving the Integral by the rectangel method
 double Equation(int x)
 {
     return tan(x) - pow(e, x + 1);
-}
+} // Equation
 double HalfDivEquation(double a, double b, double c)
 {
     double result=0;
@@ -54,12 +50,11 @@ double HalfDivEquation(double a, double b, double c)
         else b = result;
     }
     return result;
-}
+} //Solving the Equation by the Half-devision Method
 double method_chord(double a, double b, double c)
 {
     double x_next = 0;
     double tmp;
-
     do
     {
         tmp = x_next;
@@ -69,7 +64,7 @@ double method_chord(double a, double b, double c)
     } while (abs(x_next - b) > c);
 
     return x_next;
-}
+} //Solving the Equation by the chord Method #1
 
 double HordEquation(double a, double b, double c)
 {
@@ -79,13 +74,13 @@ double HordEquation(double a, double b, double c)
         b = a - ((a - b) * Equation(a)) / (Equation(a) - Equation(b));
     }
     return b;
-}
+} //Solving the Equation by the chord Method #1
 void BackGround()
 {
     SelectObject(dc, GetStockObject(DC_BRUSH));
     SetDCBrushColor(dc, RGB(255, 255, 255)); // - цвет заполнителя
     Rectangle(dc, 0, 0, 800, 400);
-} // фон 
+} // Background of Animation 
 void Animation()
 {
     system("mode con cols=100 lines=25");
@@ -150,14 +145,14 @@ void Animation()
         } // Анимация перемещения снизу вверх левая сторона
         if (PointWidth2 >= 800 && PointHigh2 >= 400) break;
     }
-} //Анимация запуска программы
+} // Animation of start the programm
 void tablica()
 {
     BackGround();
-    //Бегающий прямоугольник
+    //Running rectangel
     int R = 255, G = 255, B = 255;
     SelectObject(dc, GetStockObject(DC_BRUSH));
-    SetDCBrushColor(dc, RGB(R, G, B)); // - цвет заполнителя
+    SetDCBrushColor(dc, RGB(R, G, B)); // - Color of the placeholder
     Rectangle(dc, 10, 10, 100, 100);
     Sleep(10);
 
@@ -168,7 +163,7 @@ void tablica()
         cout << "\n" << 5 - 3 * cos(a);
         a += x;
     }
-}
+} //Don't ready table
 
 class Menu
 {
@@ -207,9 +202,9 @@ public:
 class Table  // таблица 1
 {
 private:
-    // тута переменные
+    // other variable
 public:
-    // тута главная функция или вывода или просто подсчета
+    //Main fuction
     void draw()
     {
         system("cls");
@@ -219,9 +214,9 @@ public:
 class Graf //график 2
 {
 private:
-    // тута переменные
+    // other variable
 public:
-    // тута главная функция или вывода или просто подсчета
+    //Main fuction
     void draw()
     {
         system("cls");
@@ -231,9 +226,9 @@ public:
 class Yravn //уравнение 3
 {
 private:
-    // тута переменные
+    // other variable
 public:
-    // тута главная функция или вывода или просто подсчета
+    //Main fuction
     void draw()
     {
         system("cls");
@@ -244,9 +239,9 @@ public:
 class Integral // интеграл 4
 {
 private:
-    // тута переменные
+    // other variable
 public:
-    // тута главная функция или вывода или просто подсчета
+    //Main fuction
     void draw()
     {
         system("cls");
@@ -257,9 +252,9 @@ public:
 class Author // автор 5
 {
 private:
-    // тута переменные
-public:
-    // тута главная функция или вывода или просто подсчета
+    // other variable
+public: 
+    //Main fuction
     void draw()
     {
         system("cls");
