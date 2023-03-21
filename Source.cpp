@@ -7,6 +7,7 @@
 using namespace std;
 
 double e = 2.71828182845904523536;
+double Pi = 3.1415926535;
 
 HWND hwnd = GetConsoleWindow(); //Descripter of Window
 HDC dc = GetDC(hwnd);//Device context - for drawing
@@ -26,8 +27,7 @@ void setcur(int x, int y)//установка курсора на позицию  x y
 };
 double f(double x)
 {
-    double f1 = pow(e,(-x)) * log(x+1);
-    return f1;
+    return pow(e, (-x)) * log(x + 1);
 } // Function of Integral
 double trapezoidalIntegral(double a, double b, int n) {
     const double width = (b - a) / n;
@@ -53,59 +53,39 @@ double rectangelIntegral(double a, double b, int n)
 } //Solving the Integral by the rectangel method
 double Equation(int x)
 {
-    return tan(x) - pow(e, x + 1);
+    return tan(x) - pow(e,x+1);
 } // Equation
-double HalfDivEquation(double a, double b, double c)
+double HalfDivEquation(double A, double B)
 {
-    double result=0;
-    while ((b - a) / 2 > c) {
-        result = (a + b) / 2;
-        if ((Equation(a) * Equation(result)) < 0) a = result;
-        else b = result;
-    }
-    return result;
-} //Solving the Equation by the Half-devision Method
-double method_chord(double a, double b, double c)
-{
-    double x_next = 0;
-    double tmp;
-    do
+    double C, epsilon = 0.001;
+    C = (A + B) / 2;
+    while (abs(Equation(C) > epsilon))
     {
-        tmp = x_next;
-        x_next = b - Equation(b) * (a - b) / (Equation(a) - Equation(b));
-        a = b;
-        b = tmp;
-    } while (abs(x_next - b) > c);
-
-    return x_next;
-} //Solving the Equation by the chord Method #1
-
+        C = (A + B) / 2;
+        if ((Equation(A) * Equation(C)) < 0) B = C;
+        else if ((Equation(A) * Equation(C)) > 0) A = C;
+    }
+    return C; 
+}//Solving the Equation by the Half-devision Method
+double chordmethod(double A, double B)
+{
+    double epsilon = 0.001;
+    while (abs(B - A) > epsilon)
+    {
+        A = A - (B - A) * Equation(A) / (Equation(B) - Equation(A));
+        B = B - (A - B) * Equation(B) / (Equation(A) - Equation(B));
+    }
+    return B;
+}
 double HordEquation(double a, double b, double c)
 {
-    while (fabs(f(b)) > e)
+    while (fabs(Equation(b)) > c)
     {
         a = b - ((b - a) * Equation(b)) / (Equation(b) - Equation(a));
         b = a - ((a - b) * Equation(a)) / (Equation(a) - Equation(b));
     }
     return b;
 } //Solving the Equation by the chord Method #1
-double bisecia(double a, double b, double c)
-{
-    while (abs(Equation(c)) > e)
-    {
-        c = (a + b) / 2;
-        
-        if ((Equation(a) * Equation(c) < 0))
-        {
-            b = c;
-        }
-        else if (Equation(a) * Equation(c) > 0)
-        {
-            a = c;
-        }
-    }
-    return c;
-}
 void BackGround()
 {
     SelectObject(dc, GetStockObject(DC_BRUSH));
@@ -222,15 +202,15 @@ public:
         system("cls");
         system("COLOR 35");
         cout << "\t\t\tРасчетно-графическая работа";
-        if (Punckt == 1) printf("\t\n\t\n--> Таблица\n");
+        if (Punckt == 1) printf("\t\n\t\n  --> Таблица\n");
         else             printf("\t\n\t\n   Таблица\n");
-        if (Punckt == 2) printf("\t\n\t\n--> График\n");
+        if (Punckt == 2) printf("\t\n\t\n  --> График\n");
         else             printf("\t\n\t\n   График\n");
-        if (Punckt == 3) printf("\t\n\t\n--> Уравнение\n");
+        if (Punckt == 3) printf("\t\n\t\n  --> Уравнение\n");
         else             printf("\t\n\t\n   Уравнение\n");
-        if (Punckt == 4) printf("\t\n\t\n--> Интеграл\n");
+        if (Punckt == 4) printf("\t\n\t\n  --> Интеграл\n");
         else             printf("\t\n\t\n   Интеграл\n");
-        if (Punckt == 5) printf("\t\n\t\n--> Об авторе\n");
+        if (Punckt == 5) printf("\t\n\t\n  --> Об авторе\n");
         else             printf("\t\n\t\n   Об авторе\n");
 
     }
@@ -269,11 +249,12 @@ public:
     void draw()
     {
         system("cls");
-        cout << "\n\tКорень уравнения, решенное методом половинного деления равен: " << HalfDivEquation(0.5, 2.5, 0.001);
-        cout << "\n\tКорень уравнения, решенное методом хорд равен: " << bisecia(0.5, 2.5, 0.001);
+        cout << "\n\tКорень уравнения, решенное методом половинного деления равен: " << HalfDivEquation(1.4, Pi/2);
+        //cout << "\n\tКорень уравнения, решенное методом хорд равен: " << chordmethod(0,Pi/2); //Right answer = 1.48790267
+
     }
 };
-class Integral // интеграл 4
+class Integral
 {
 private:
     // other variable
