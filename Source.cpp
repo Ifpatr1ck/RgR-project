@@ -43,9 +43,7 @@ void tablica()
     int n = 20,x2 = 5, y2 = 0;;
     double F1[20], F2[20], x, dx, x1[20], a = 0, b = 2*Pi, minF1 = INT_MAX, maxF1 = INT_MIN, minF2 = INT_MAX, maxF2 = INT_MIN;
     dx = fabs(b - a) / (n - 1);
-    x = a;
-    x1[0] = a;
-    int x2 = 5, y2 =0;
+    x = x1[0] = a;
     gotoxy(x2, y2);
     printf(" ______________________________\n");
     gotoxy(x2, y2 + 1);
@@ -145,7 +143,7 @@ void Charts() {
         TextOut(hdc, 360, 240, w2, 18);
     }
     int n = 20000;
-    float F1[20000], F2[20000], x1[20000], x, dx, a = 0, b = 5, minF1 = 10000, maxF1 = -10000, minF2 = 10000, maxF2 = -10000;
+    double F1[20000], F2[20000], x1[20000], x, dx, a = 0, b = 5, minF1 = 10000, maxF1 = -10000, minF2 = 10000, maxF2 = -10000;
     dx = fabs(b - a) / (n - 1);
     x = a;
     for (int i = 0; i < n; i++) {
@@ -181,7 +179,7 @@ void AboutME() {
     cout << "выполнил студент группы ПИН-221" << endl;
     gotoxy(30, 3);
     cout << "    Кит Денис Владимирович" << endl;
-}
+} //Function, which can talking about author
 double FunctionIntegral(double x) {
     return pow(e, (-x)) * log(x + 1);
 }// Function of Integral
@@ -257,55 +255,55 @@ void Animation()
             for (int j = 0; j <= 800 - PointWidth2; j += Speed)
             {
                 BackGround();
-                //Бегающий прямоугольник
+                //running rectangle
                 SelectObject(dc, GetStockObject(DC_BRUSH));
-                SetDCBrushColor(dc, RGB(R, G, B)); // - цвет заполнителя
+                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
                 Rectangle(dc, PointWidth1 + j, PointHigh1, PointWidth2 + j, PointHigh2);
                 Sleep(10);
             }
             y++;
-        } // Анимация перемещения слево направо верхняя сторона
+        } // Animation of moving left to right
         if (x == 0 && y == 1)
         {
             for (int k = 0; k <= 400 - PointHigh2; k += Speed)
             {
                 BackGround();
-                //Бегающий прямоугольник
+                //running rectangle
                 SelectObject(dc, GetStockObject(DC_BRUSH));
-                SetDCBrushColor(dc, RGB(R, G, B)); // - цвет заполнителя
+                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
                 Rectangle(dc, 800 - PointWidth2, PointHigh1 + k, 800, PointHigh2 + k);
                 Sleep(10);
             }
             x++;
-        }// Анимация перемещения сверху вниз правая сторона
+        }// Animation of moving upper to bottom
         if (x == 1 && y == 1)
         {
             for (int j = 0; j <= 800 - PointWidth2; j += Speed)
             {
                 BackGround();
-                //Бегающий прямоугольник
+                //running rectangle
                 SelectObject(dc, GetStockObject(DC_BRUSH));
-                SetDCBrushColor(dc, RGB(R, G, B)); // - цвет заполнителя
+                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
                 Rectangle(dc, 800 - PointWidth2 - j, 400 - PointHigh2, 800 - j, 400);
                 Sleep(10);
             }
             y--;
-        } // Анимация перемещения справа влево нижняя сторона
+        } // Animation of moving right to left
         if (x == 1 && y == 0)
         {
             int j = 0;
             for (; j < 400 + Speed - PointHigh2; j += Speed)
             {
                 BackGround();
-                //Бегающий прямоугольник
+                //running rectangle
                 SelectObject(dc, GetStockObject(DC_BRUSH));
-                SetDCBrushColor(dc, RGB(R, G, B)); // - цвет заполнителя
+                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
                 Rectangle(dc, PointWidth1, 400 - PointHigh2 - j, PointWidth2, 400 - j);
                 Sleep(10);
                 if (j >= (400 - PointHigh2)) N += 100;
             }
             x--;
-        } // Анимация перемещения снизу вверх левая сторона
+        } // Animation of moving bottom to upper
         if (PointWidth2 >= 800 && PointHigh2 >= 400) break;
     }
 } // Animation of start the programm
@@ -329,8 +327,7 @@ public:
         default:
             break;
         }
-        // рисуем менюшку
-        //gotoxy(0, 0);
+        // drawing menu
         setcur(0, 0);
         system("cls");
         system("COLOR 35");
