@@ -1,16 +1,19 @@
 #include <iostream>
-#include <Windows.h>
-#include <stdio.h>
+#include <locale.h>
+#include <windows.h>
 #include <conio.h>
-#include <math.h>
-
+#include <string>
+#include <stdio.h>
+#include <cmath>
 using namespace std;
-
+//#define UP 72;
+//#define DOWN 80;
+//#define ESC 27;
+//#define ENTER 13;
 double e = 2.71828182845904523536;
 double Pi = 3.1415926535;
-
-HWND hwnd = GetConsoleWindow(); //Descripter of Window
-HDC dc = GetDC(hwnd);//Device context - for drawing
+HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+HPEN CreatePen(int fnPenStyle,int nWidth,COLORREF crColor);
 void gotoxy(int xpos, int ypos)
 {
     COORD scrn;
@@ -25,21 +28,172 @@ void setcur(int x, int y)//установка курсора на позицию  x y
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 };
-double f(double x)
+void ConsoleCursorVisible(bool show, short size)
 {
+    CONSOLE_CURSOR_INFO structCursorInfo;
+    GetConsoleCursorInfo(hStdOut, &structCursorInfo);
+    structCursorInfo.bVisible = show;
+    structCursorInfo.dwSize = size;
+    SetConsoleCursorInfo(hStdOut, &structCursorInfo);
+}
+HWND hwnd = GetConsoleWindow(); //Descripter of Window
+HDC dc = GetDC(hwnd);//Device context - for drawing
+void tablica()
+{
+    int n = 20,x2 = 5, y2 = 0;;
+    double F1[20], F2[20], x, dx, x1[20], a = 0, b = 2*Pi, minF1 = INT_MAX, maxF1 = INT_MIN, minF2 = INT_MAX, maxF2 = INT_MIN;
+    dx = fabs(b - a) / (n - 1);
+    x = a;
+    x1[0] = a;
+    int x2 = 5, y2 =0;
+    gotoxy(x2, y2);
+    printf(" ______________________________\n");
+    gotoxy(x2, y2 + 1);
+    printf("| I |    X   |   F1   |   F2   | \n");
+    gotoxy(x2, y2 + 2);
+    printf("|___|________|________|________|\n");
+    for (int i = 0; i < n; i++) {
+        F1[i] = 5 - 3*cos(x);
+        F2[i] = sqrt(pow(e,x)-1);
+        x1[i] = x;
+        x += dx;
+    }
+    for (int i = 0; i < n; i++) {
+        minF1 = min(F1[i], minF1);
+        maxF1 = max(F1[i], maxF1);
+        if (F2[i] != -INFINITY) minF2 = min(F2[i], minF2);
+        maxF2 = max(F2[i], maxF2);
+    }
+    for (int i = 1; i <= n; i++) {
+        gotoxy(x2, y2 + 2 + i);
+        SetConsoleTextAttribute(hStdOut, 11);
+        printf("|%3d|%8.3f|", i, x1[i - 1]);
+        if (F1[i - 1] == minF1) {
+            SetConsoleTextAttribute(hStdOut, 4);
+            printf("%8.4f", F1[i - 1]);
+        }
+        else if (F1[i - 1] == maxF1) {
+            SetConsoleTextAttribute(hStdOut, 2);
+            printf("%8.4f", F1[i - 1]);
+        }
+        else
+        {
+            SetConsoleTextAttribute(hStdOut, 11);
+            printf("%8.4f", F1[i - 1]);
+        }
+        SetConsoleTextAttribute(hStdOut, 11);
+        printf("|");
+        if (F2[i - 1] == minF2) {
+            SetConsoleTextAttribute(hStdOut, 4);
+            printf("%8.4f", F2[i - 1]);
+        }
+        else if (F2[i - 1] == maxF2) {
+            SetConsoleTextAttribute(hStdOut, 2);
+            printf("%8.4f", F2[i - 1]);
+        }
+        else
+        {
+            if (F2[i - 1] == -INFINITY) {
+                SetConsoleTextAttribute(hStdOut, 11);
+                printf("%8s", "ERROR");
+            }
+            else {
+                SetConsoleTextAttribute(hStdOut, 11);
+                printf("%8.4f", F2[i - 1]);
+            }
+        }
+        SetConsoleTextAttribute(hStdOut, 11);
+        printf("|\n");
+    }
+    gotoxy(x2, y2 + 3 + n);
+    cout << "|___|________|________|________| \n";
+}
+void Charts() {
+    HWND hwn = GetConsoleWindow();
+    COLORREF lineColor = RGB(0, 0, 0);
+    HDC hdc = GetDC(hwn);
+    const int d = 270, k = 100, x0 = 50, y0 = 270, c = 50;
+    SelectObject(hdc, CreatePen(0, 1, RGB(255, 255, 255)));
+    MoveToEx(hdc, 0, d, NULL);
+    LineTo(hdc, c * k, d);
+    MoveToEx(hdc, c, 0, NULL);
+    LineTo(hdc, c, 3 * d);
+    for (int i = 0; i < 30; i++) {
+        MoveToEx(hdc, x0 - 10, y0 - k * i, NULL);
+        LineTo(hdc, x0 + 10, y0 - k * i);
+        MoveToEx(hdc, x0 - 10, y0 + k * i, NULL);
+        LineTo(hdc, x0 + 10, y0 + k * i);
+        MoveToEx(hdc, x0 + k * i, y0 - 10, NULL);
+        LineTo(hdc, x0 + k * i, y0 + 10);
+        MoveToEx(hdc, x0 - k * i, y0 - 10, NULL);
+        LineTo(hdc, x0 - k * i, y0 + 10);
+        string s = to_string(i);
+        LPCWSTR w;
+        wstring ste = wstring(s.begin(), s.end());
+        w = ste.c_str();
+        if (i < 10) {
+            TextOut(hdc, x0 - 10, y0 - k * i, w, 1);
+            TextOut(hdc, x0 + k * i, y0 + 10, w, 1);
+        }
+        else {
+            TextOut(hdc, x0 - 10, y0 - k * i, w, 2);
+            TextOut(hdc, x0 + k * i, y0 + 10, w, 2);
+        }
+        LPCWSTR w1 = L"3^(-x) / 50";
+        LPCWSTR w2 = L"x * e^(-x) + ln(x)";
+        TextOut(hdc, 460, 80, w1, 11);
+        TextOut(hdc, 360, 240, w2, 18);
+    }
+    int n = 20000;
+    float F1[20000], F2[20000], x1[20000], x, dx, a = 0, b = 5, minF1 = 10000, maxF1 = -10000, minF2 = 10000, maxF2 = -10000;
+    dx = fabs(b - a) / (n - 1);
+    x = a;
+    for (int i = 0; i < n; i++) {
+        F1[i] = pow(3, -x) / 50;
+        F2[i] = x * exp(-x) + log(x);
+        x1[i] = x;
+        x += dx;
+    }
+    for (int i = 0; i < n; i++) {
+        SetPixel(hdc, c + k * x1[i], d - k * F2[i], RGB(64, 224, 208));
+        MoveToEx(hdc, c + k * x1[i], d - k * F2[i], NULL);
+        SetPixel(hdc, c + k * x1[i], d - k * F1[i], RGB(0, 255, 127));
+        MoveToEx(hdc, c + k * x1[i], d - k * F1[i], NULL);
+    }
+}
+double FunctionEquation(double x) {
+    return tan(x) - pow(e, x + 1);
+}
+double HalfDivEquation(double a, double b, double e) {
+    double c;
+    do {
+        c = (a + b) / 2;
+        if (FunctionEquation(c) * FunctionEquation(a) < 0)  b = c;
+        else if (c == 0) return 0;
+        else a = c;
+    } while (fabs(a - b) >= e);
+    return c;
+}//Solving the Equation by the Half-devision Method
+void AboutME() {
+    gotoxy(30, 1);
+    cout << "  Расчётно-графическую работу" << endl;
+    gotoxy(30, 2);
+    cout << "выполнил студент группы ПИН-221" << endl;
+    gotoxy(30, 3);
+    cout << "    Кит Денис Владимирович" << endl;
+}
+double FunctionIntegral(double x) {
     return pow(e, (-x)) * log(x + 1);
-} // Function of Integral
+}// Function of Integral
 double trapezoidalIntegral(double a, double b, int n) {
     const double width = (b - a) / n;
-
     double trapezoidal_integral = 0;
     for (int i = 0; i < n; i++) {
         const double x1 = a + i * width;
         const double x2 = a + (i + 1) * width;
 
-        trapezoidal_integral += 0.5 * (x2 - x1) * (f(x1) + f(x2));
+        trapezoidal_integral += 0.5 * (x2 - x1) * (FunctionIntegral(x1) + FunctionIntegral(x2));
     }
-
     return trapezoidal_integral;
 } //Solving the Integral by the trapezoid method    
 double rectangelIntegral(double a, double b, int n)
@@ -47,7 +201,7 @@ double rectangelIntegral(double a, double b, int n)
     double INTGRL = 0.0;
     double h = double((b - a) / n);
     for (double x = a; x <= b; x += h)
-        INTGRL += f(x - h / 2);
+        INTGRL += FunctionIntegral(x - h / 2);
     INTGRL *= h;
     return INTGRL;
 } //Solving the Integral by the rectangel method
@@ -55,28 +209,6 @@ double Equation(int x)
 {
     return tan(x) - pow(e,x+1);
 } // Equation
-double HalfDivEquation(double A, double B)
-{
-    double C, epsilon = 0.001;
-    C = (A + B) / 2;
-    while (abs(Equation(C) > epsilon))
-    {
-        C = (A + B) / 2;
-        if ((Equation(A) * Equation(C)) < 0) B = C;
-        else if ((Equation(A) * Equation(C)) > 0) A = C;
-    }
-    return C; 
-}//Solving the Equation by the Half-devision Method
-double chordmethod(double A, double B)
-{
-    double epsilon = 0.001;
-    while (abs(B - A) > epsilon)
-    {
-        A = A - (B - A) * Equation(A) / (Equation(B) - Equation(A));
-        B = B - (A - B) * Equation(B) / (Equation(A) - Equation(B));
-    }
-    return B;
-}
 double HordEquation(double a, double b, double c)
 {
     while (fabs(Equation(b)) > c)
@@ -86,6 +218,26 @@ double HordEquation(double a, double b, double c)
     }
     return b;
 } //Solving the Equation by the chord Method #1
+double Trapeze(double a, double b, double n) {
+    double h = (b - a) / n;
+    double sum = FunctionIntegral(a) + FunctionIntegral(b);
+    for (int i = 1; i <= n - 1; i++) {
+        sum += 2 * FunctionIntegral(a + i * h);
+    }
+    sum *= h / 2;
+    return sum;
+} //Trapezoidal method
+double Sympson(double a, double b, double n) {
+    double h = (b - a) / n;
+    double sum = FunctionIntegral(a) + FunctionIntegral(b);
+    int k;
+    for (int i = 1; i <= n - 1; i++) {
+        k = 2 + 2 * (i % 2);
+        sum += k * FunctionIntegral(a + i * h);
+    }
+    sum *= h / 3;
+    return sum;
+} // Sympson's method // not need
 void BackGround()
 {
     SelectObject(dc, GetStockObject(DC_BRUSH));
@@ -157,25 +309,6 @@ void Animation()
         if (PointWidth2 >= 800 && PointHigh2 >= 400) break;
     }
 } // Animation of start the programm
-void tablica()
-{
-    BackGround();
-    //Running rectangel
-    int R = 50, G = 90, B = 75;
-    SelectObject(dc, GetStockObject(PS_SOLID));
-    SetDCBrushColor(dc, RGB(R, G, B)); // - Color of the placeholder
-    Rectangle(dc, 10, 10, 100, 100);
-    Sleep(10);
-
-    int n = 20;
-    double a = 0, x = 6.28 / n;
-    for (int i = 0; i < n; i++);
-    {
-        cout << "\n" << 5 - 3 * cos(a);
-        a += x;
-    }
-} //Don't ready table
-
 class Menu
 {
 public:
@@ -223,9 +356,10 @@ public:
     //Main fuction
     void draw()
     {
-        tablica();
         system("cls");
-        printf("Тут могла быть ваша таблица");
+        tablica();
+        gotoxy(47, 2);
+        cout << "Таблица иттераций";
     }
 };
 class Graf //график 2
@@ -237,7 +371,7 @@ public:
     void draw()
     {
         system("cls");
-        printf("Тут мог быть ваш график");
+        Charts();
     }
 };
 class Yravn //уравнение 3
@@ -249,7 +383,7 @@ public:
     void draw()
     {
         system("cls");
-        cout << "\n\tКорень уравнения, решенное методом половинного деления равен: " << HalfDivEquation(1.4, Pi/2);
+        cout << "\n\tКорень уравнения, решенное методом половинного деления равен: " << HalfDivEquation(1.4, Pi / 2, 0.001);
         //cout << "\n\tКорень уравнения, решенное методом хорд равен: " << chordmethod(0,Pi/2); //Right answer = 1.48790267
 
     }
@@ -265,6 +399,9 @@ public:
         system("cls");
         cout << "\n\tИнтеграл, решенный методом трапеций равен: " << trapezoidalIntegral(2.0, 5.0, 200);
         cout << "\n\tИнтеграл, решенный методом прямоугольников равен: " << rectangelIntegral(2.0, 5.0, 200);
+
+        cout << "\n\tИнтеграл, решенный методом трапеций #2 равен: " << Trapeze(2.0, 5.0, 200);
+        cout << "\n\tИнтеграл, решенный методом прямоугольников #2 равен: " << Sympson(2.0, 5.0, 200);
     }
 };
 class Author // автор 5
@@ -276,13 +413,12 @@ public:
     void draw()
     {
         system("cls");
-        cout << "\t\tРасчетно-графическая работа выполнена по дисциплине \"Программирование\" \n\t\tстудентов группы ПИН-221 Кит Денисом Владимировичем\n\t\tВариант работы: №11";
-    }
+        AboutME();
+     }
 };
 int main()
 {
     Animation();
-    system("color 2");
     setlocale(LC_ALL, "rus");
     ShowCursor(FALSE);
     Menu menu;
