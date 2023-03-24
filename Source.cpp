@@ -110,7 +110,7 @@ void Charts() {
     HWND hwn = GetConsoleWindow();
     COLORREF lineColor = RGB(0, 0, 0);
     HDC hdc = GetDC(hwn);
-    const int d = 270, k = 100, x0 = 50, y0 = 270, c = 50;
+    const int d = 500, k = 50, x0 = 75, y0 = 500, c = 75;
     SelectObject(hdc, CreatePen(0, 1, RGB(255, 255, 255)));
     MoveToEx(hdc, 0, d, NULL);
     LineTo(hdc, c * k, d);
@@ -137,18 +137,18 @@ void Charts() {
             TextOut(hdc, x0 - 10, y0 - k * i, w, 2);
             TextOut(hdc, x0 + k * i, y0 + 10, w, 2);
         }
-        LPCWSTR w1 = L"3^(-x) / 50";
+        LPCWSTR w1 = L"5-3cos(x)";
         LPCWSTR w2 = L"x * e^(-x) + ln(x)";
         TextOut(hdc, 460, 80, w1, 11);
         TextOut(hdc, 360, 240, w2, 18);
     }
-    int n = 20000;
-    double F1[20000], F2[20000], x1[20000], x, dx, a = 0, b = 5, minF1 = 10000, maxF1 = -10000, minF2 = 10000, maxF2 = -10000;
+    int n = 40000;
+    double F1[40000], F2[40000], x1[40000], x, dx, a = 0, b = 14.5, minF1 = 20000, maxF1 = -20000, minF2 = 20000, maxF2 = -20000;
     dx = fabs(b - a) / (n - 1);
     x = a;
     for (int i = 0; i < n; i++) {
-        F1[i] = pow(3, -x) / 50;
-        F2[i] = x * exp(-x) + log(x);
+        F1[i] = 5 - 3 * cos(x);
+        F2[i] = sqrt(pow(e, x) - 1);
         x1[i] = x;
         x += dx;
     }
@@ -330,7 +330,7 @@ public:
         // drawing menu
         setcur(0, 0);
         system("cls");
-        system("COLOR 35");
+        //system("COLOR 35");
         cout << "\t\t\tРасчетно-графическая работа";
         if (Punckt == 1) printf("\t\n\t\n  --> Таблица\n");
         else             printf("\t\n\t\n   Таблица\n");
