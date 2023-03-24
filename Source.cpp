@@ -6,24 +6,24 @@
 #include <stdio.h>
 #include <cmath>
 using namespace std;
-double e = 2.71828182845904523536;
-double Pi = 3.1415926535;
+double e = 2.71828182845904523536; //Euler number
+double Pi = 3.1415926535; // Number Pi
 HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-HPEN CreatePen(int fnPenStyle,int nWidth,COLORREF crColor);
+HPEN CreatePen(int fnPenStyle,int nWidth,COLORREF crColor); //Pen
 void gotoxy(int xpos, int ypos)
 {
     COORD scrn;
     HANDLE hOuput = GetStdHandle(STD_OUTPUT_HANDLE);
     scrn.X = xpos; scrn.Y = ypos;
     SetConsoleCursorPosition(hOuput, scrn);
-} // No Lags with moving between menu numbers
-void setcur(int x, int y)//установка курсора на позицию  x y 
+}//Moving carriage to coordinates (x,y)
+void setcur(int x, int y)
 {
     COORD coord;
     coord.X = x;
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-};
+}; //Install the cursor to position(x,y)
 void ConsoleCursorVisible(bool show, short size)
 {
     CONSOLE_CURSOR_INFO structCursorInfo;
@@ -31,32 +31,27 @@ void ConsoleCursorVisible(bool show, short size)
     structCursorInfo.bVisible = show;
     structCursorInfo.dwSize = size;
     SetConsoleCursorInfo(hStdOut, &structCursorInfo);
-}
+} //Visible of Console Cursor
 HWND hwnd = GetConsoleWindow(); //Descripter of Window
 HDC dc = GetDC(hwnd);//Device context - for drawing
 void tablica()
 {
-    int n = 20,x2 = 5, y2 = 0;;
+    system("color 2"); //Color of text
+    int n = 20,x2 = 5, y2 = 0; //n - count of iteration, x2,y2 - coordinates of position the table
     double F1[20], F2[20], x, dx, x1[20], a = 0, b = 2*Pi, minF1 = INT_MAX, maxF1 = INT_MIN, minF2 = INT_MAX, maxF2 = INT_MIN;
-    dx = fabs(b - a) / (n - 1);
+    dx = fabs(b - a) / (n - 1); //Increment of function, a,b - function interval
     x = x1[0] = a;
     gotoxy(x2, y2);
     printf(" ______________________________\n");
     gotoxy(x2, y2 + 1);
-    printf("| I |    X   |   F1   |   F2   | \n");
+    printf("| I |    X   |   F1   |   F2   | \n"); //drawing the table
     gotoxy(x2, y2 + 2);
     printf("|___|________|________|________|\n");
     for (int i = 0; i < n; i++) {
-        F1[i] = 5 - 3*cos(x);
-        F2[i] = sqrt(pow(e,x)-1);
+        F1[i] = 5 - 3*cos(x); //Funtion #1
+        F2[i] = sqrt(pow(e,x)-1); //Function #2
         x1[i] = x;
         x += dx;
-    }
-    for (int i = 0; i < n; i++) {
-        minF1 = min(F1[i], minF1);
-        maxF1 = max(F1[i], maxF1);
-        if (F2[i] != -INFINITY) minF2 = min(F2[i], minF2);
-        maxF2 = max(F2[i], maxF2);
     }
     for (int i = 1; i <= n; i++) {
         gotoxy(x2, y2 + 2 + i);
@@ -103,10 +98,11 @@ void tablica()
     cout << "|___|________|________|________| \n";
 }
 void Charts() {
+    system("color 2"); //Color of text
     HWND hwn = GetConsoleWindow();
     COLORREF lineColor = RGB(0, 0, 0);
     HDC hdc = GetDC(hwn);
-    const int d = 500, k = 50, x0 = 75, y0 = 500, c = 75; // d = 350 - good. Grafic is upper because that better looking functions
+    const int d = 500, k = 50, x0 = 50, y0 = 500, c = 50; // d = 350 - good. Grafic is upper because that better looking functions
     SelectObject(hdc, CreatePen(0, 1, RGB(255, 255, 255)));
     MoveToEx(hdc, 0, d, NULL);
     LineTo(hdc, c * k, d);
@@ -139,12 +135,12 @@ void Charts() {
         TextOut(hdc, 300, 60, w2, 15);
     }
     int n = 40000;
-    double F1[40000], F2[40000], x1[40000], x, dx, a = 0, b = 14.5, minF1 = 20000, maxF1 = -20000, minF2 = 20000, maxF2 = -20000;
-    dx = fabs(b - a) / (n - 1);
+    double F1[40000], F2[40000], x1[40000], x, dx, a = 0, b = 15, minF1 = 20000, maxF1 = -20000, minF2 = 20000, maxF2 = -20000;
+    dx = fabs(b - a) / (n - 1);//Increment of function, a,b - function interval
     x = a;
     for (int i = 0; i < n; i++) {
-        F1[i] = 5 - 3 * cos(x);
-        F2[i] = sqrt(pow(e, x) - 1);
+        F1[i] = 5 - 3 * cos(x); //Function of Grafic #1
+        F2[i] = sqrt(pow(e, x) - 1);//Function of Grafic #2
         x1[i] = x;
         x += dx;
     }
@@ -156,7 +152,7 @@ void Charts() {
     }
 }
 double FunctionEquation(double x) {
-    return tan(x) - pow(e, x + 1);
+    return tan(x) - pow(e, x + 1); // Function of Equation
 }
 double HalfDivEquation(double a, double b, double e) {
     double c;
@@ -190,15 +186,6 @@ double trapezoidalIntegral(double a, double b, int n) {
     }
     return trapezoidal_integral;
 } //Solving the Integral by the trapezoid method    
-double rectangelIntegral(double a, double b, int n)
-{
-    double INTGRL = 0.0;
-    double h = double((b - a) / n);
-    for (double x = a; x <= b; x += h)
-        INTGRL += FunctionIntegral(x - h / 2);
-    INTGRL *= h;
-    return INTGRL;
-} //Solving the Integral by the rectangel method
 double Equation(int x)
 {
     return tan(x) - pow(e,x+1);
@@ -212,16 +199,7 @@ double HordEquation(double a, double b, double c)
     }
     return b;
 } //Solving the Equation by the chord Method #1
-double Trapeze(double a, double b, double n) {
-    double h = (b - a) / n;
-    double sum = FunctionIntegral(a) + FunctionIntegral(b);
-    for (int i = 1; i <= n - 1; i++) {
-        sum += 2 * FunctionIntegral(a + i * h);
-    }
-    sum *= h / 2;
-    return sum;
-} //Trapezoidal method
-double Sympson(double a, double b, double n) {
+double rectangelIntegral(double a, double b, double n) {
     double h = (b - a) / n;
     double sum = FunctionIntegral(a) + FunctionIntegral(b);
     int k;
@@ -240,24 +218,23 @@ void BackGround()
 } // Background of Animation 
 void Animation()
 {
-    system("mode con cols=100 lines=25");
-    int x = 0, y = 0, N = 0, R = 0, G = 133, B = 0;
+    system("mode con cols=100 lines=25"); //size of console
+    int x = 0, y = 0, N = 0, R = 0, G = 133, B = 0; // RGB is color, x,y - coordination
     for (int i = 0; GetKeyState(VK_ESCAPE) >= 0; i++)
     {
-        int PointWidth1 = 0, PointHigh1 = 0, PointWidth2 = 100 + N, PointHigh2 = 100 + N / 4,
-            Speed = 20;
+        int PointWidth1 = 0, PointHigh1 = 0, PointWidth2 = 100 + N, PointHigh2 = 100 + N / 4,Speed = 20; // Speed is how quickly rectangle is running
         if (x == 0 && y == 0)
         {
             for (int j = 0; j <= 800 - PointWidth2; j += Speed)
             {
-                BackGround();
+                BackGround(); //Function of background color
                 //running rectangle
                 SelectObject(dc, GetStockObject(DC_BRUSH));
                 SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
                 Rectangle(dc, PointWidth1 + j, PointHigh1, PointWidth2 + j, PointHigh2);
                 Sleep(10);
             }
-            y++;
+            y++; //move to the next step
         } // Animation of moving left to right
         if (x == 0 && y == 1)
         {
@@ -303,20 +280,21 @@ void Animation()
         if (PointWidth2 >= 800 && PointHigh2 >= 400) break;
     }
 } // Animation of start the programm
-class Menu
+class Menu //Menu
 {
 public:
-    int Num = 0; // номер нажатой клавиши 
-    int Punckt = 0; // пункты 1-5
+    int Num = 0; // number of selected button
+    int Punckt = 0; // point of menu
     void draw(int num)
     {
+        system("color 35");
         switch (num)
         {
-        case 80: // стрелка вниз
+        case 80: // down
             if (Punckt >= 5) Punckt = 1;
             else Punckt++;
             break;
-        case 72: // стрелка вверх
+        case 72: // up
             if (Punckt <= 1) Punckt = 5;
             else Punckt--;
             break;
@@ -326,87 +304,72 @@ public:
         // drawing menu
         setcur(0, 0);
         system("cls");
-        //system("COLOR 35");
-        cout << "\t\t\tРасчетно-графическая работа";
-        if (Punckt == 1)
+        cout << "\n\n\t\t\t\tРасчетно-графическая работа"; //Name of work
+        if (Punckt == 1) //animation of choice
         {
             gotoxy(40,6);
             printf("  --> Таблица\n");
             gotoxy(0, 0);
         }
-        else
+        else //animation of choice
         {
             gotoxy(40, 6);
             printf("  Таблица\n");
             gotoxy(0, 0);
         }
-        if (Punckt == 2)
+        if (Punckt == 2) //animation of choice
         {
             gotoxy(40, 8);
             printf("  --> График\n");
             gotoxy(0, 0);
         }
-        else
+        else //animation of choice
         {
             gotoxy(40, 8);
             printf("  График\n");
             gotoxy(0, 0);
         }
-        if (Punckt == 3)
+        if (Punckt == 3) //animation of choice
         {
             gotoxy(40, 10);
             printf("  --> Уравнение\n");
             gotoxy(0, 0);
         }
-        else
+        else //animation of choice
         {
             gotoxy(40, 10);
             printf("  Уравнение\n");
             gotoxy(0, 0);
         }
-        if (Punckt == 4)
+        if (Punckt == 4) //animation of choice
         {
             gotoxy(40, 12);
             printf("  --> Интеграл\n");
             gotoxy(0, 0);
         }
-        else
+        else //animation of choice
         {
             gotoxy(40, 12);
             printf("  Интеграл\n");
             gotoxy(0, 0);
         }
-        if (Punckt == 5)
+        if (Punckt == 5) //animation of choice
         {
             gotoxy(40, 14);
             printf("  --> Об авторе\n");
             gotoxy(0, 0);
         }
-        else
+        else //animation of choice
         {
             gotoxy(40, 14);
             printf("  Об авторе\n");
             gotoxy(0, 0);
         }
-       /* if (Punckt == 1) printf("\t\n\t\n  --> Таблица\n");
-        else             printf("\t\n\t\n   Таблица\n");
-        if (Punckt == 2) printf("\t\n\t\n  --> График\n");
-        else             printf("\t\n\t\n   График\n");
-        if (Punckt == 3) printf("\t\n\t\n  --> Уравнение\n");
-        else             printf("\t\n\t\n   Уравнение\n");
-        if (Punckt == 4) printf("\t\n\t\n  --> Интеграл\n");
-        else             printf("\t\n\t\n   Интеграл\n");
-        if (Punckt == 5) printf("\t\n\t\n  --> Об авторе\n");
-        else             printf("\t\n\t\n   Об авторе\n");*/
-
     }
 };
-class Table  // таблица 1
+class Table //Table of function
 {
-private:
-    // other variable
 public:
-    //Main fuction
     void draw()
     {
         system("cls");
@@ -415,102 +378,75 @@ public:
         cout << "Таблица иттераций";
     }
 };
-class Graf //график 2
+class Graf
 {
-private:
-    // other variable
 public:
-    //Main fuction
     void draw()
     {
         system("cls");
         Charts();
     }
 };
-class Yravn //уравнение 3
+class Yravn
 {
-private:
-    // other variable
 public:
-    //Main fuction
     void draw()
     {
         system("cls");
         cout << "\n\tКорень уравнения, решенное методом половинного деления равен: " << HalfDivEquation(1.4, Pi / 2, 0.001);
-        //cout << "\n\tКорень уравнения, решенное методом хорд равен: " << chordmethod(0,Pi/2); //Right answer = 1.48790267
-
     }
 };
 class Integral
 {
-private:
-    // other variable
 public:
-    //Main fuction
     void draw()
     {
         system("cls");
         cout << "\n\tИнтеграл, решенный методом трапеций равен: " << trapezoidalIntegral(2.0, 5.0, 200);
         cout << "\n\tИнтеграл, решенный методом прямоугольников равен: " << rectangelIntegral(2.0, 5.0, 200);
-
-        cout << "\n\tИнтеграл, решенный методом трапеций #2 равен: " << Trapeze(2.0, 5.0, 200);
-        cout << "\n\tИнтеграл, решенный методом прямоугольников #2 равен: " << Sympson(2.0, 5.0, 200);
     }
 };
-class Author // автор 5
+class Author
 {
-private:
-    // other variable
 public: 
-    //Main fuction
     void draw()
     {
         system("cls");
-        AboutME();
+        AboutME(); //Function with information about author
      }
 };
 int main()
 {
-    Animation();
+    Animation(); //Animation of Loading
     setlocale(LC_ALL, "rus");
-    ShowCursor(FALSE);
+    ShowCursor(FALSE); //Visible of Cursor if false
     Menu menu;
     menu.draw(menu.Num);
     while (true)
     {
-        menu.Num = _getch();
+        menu.Num = _getch(); //waiting click
         menu.draw(menu.Num);
-        if (menu.Num == 13) // нажатие энтера
+        if (menu.Num == 13)
         {
             switch (menu.Punckt)
             {
-            case 1:
-                // функция таблицы после нажатия энтер и остальное так же
-                //printf("1");
+            case 1: //Case of table
                 Table tabl;
                 tabl.draw();
                 break;
-            case 2:
-                //printf("2");
-                // функция графикa
+            case 2: //Case of Grafic
                 Graf graf;
                 graf.draw();
                 break;
-            case 3:
-                //printf("3");
-                // функция уравнения
+            case 3: //Case of Equation
                 Yravn yravn;
                 yravn.draw();
                 break;
-            case 4:
-                //printf("4");
-                // функция интеграла
+            case 4: //Case of Integral
                 Integral integ;
                 integ.draw();
                 break;
-            case 5:
-                //printf("5");
-                // функция автора
+            case 5: //Case about author
                 Author author;
                 author.draw();
                 break;
@@ -518,8 +454,6 @@ int main()
                 break;
             }
         }
-        else if (menu.Num == 27) menu.draw(menu.Num); // нажатие ескейпа возвращает к менюшке
-
-
+        else if (menu.Num == 27) menu.draw(menu.Num); 
     }
 }
