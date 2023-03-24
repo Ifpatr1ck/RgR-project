@@ -6,10 +6,6 @@
 #include <stdio.h>
 #include <cmath>
 using namespace std;
-//#define UP 72;
-//#define DOWN 80;
-//#define ESC 27;
-//#define ENTER 13;
 double e = 2.71828182845904523536;
 double Pi = 3.1415926535;
 HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -110,7 +106,7 @@ void Charts() {
     HWND hwn = GetConsoleWindow();
     COLORREF lineColor = RGB(0, 0, 0);
     HDC hdc = GetDC(hwn);
-    const int d = 500, k = 50, x0 = 75, y0 = 500, c = 75;
+    const int d = 500, k = 50, x0 = 75, y0 = 500, c = 75; // d = 350 - good. Grafic is upper because that better looking functions
     SelectObject(hdc, CreatePen(0, 1, RGB(255, 255, 255)));
     MoveToEx(hdc, 0, d, NULL);
     LineTo(hdc, c * k, d);
@@ -138,9 +134,9 @@ void Charts() {
             TextOut(hdc, x0 + k * i, y0 + 10, w, 2);
         }
         LPCWSTR w1 = L"5-3cos(x)";
-        LPCWSTR w2 = L"x * e^(-x) + ln(x)";
+        LPCWSTR w2 = L"sqrt(e^x - 1)";
         TextOut(hdc, 460, 80, w1, 11);
-        TextOut(hdc, 360, 240, w2, 18);
+        TextOut(hdc, 300, 60, w2, 15);
     }
     int n = 40000;
     double F1[40000], F2[40000], x1[40000], x, dx, a = 0, b = 14.5, minF1 = 20000, maxF1 = -20000, minF2 = 20000, maxF2 = -20000;
@@ -332,7 +328,67 @@ public:
         system("cls");
         //system("COLOR 35");
         cout << "\t\t\tРасчетно-графическая работа";
-        if (Punckt == 1) printf("\t\n\t\n  --> Таблица\n");
+        if (Punckt == 1)
+        {
+            gotoxy(40,6);
+            printf("  --> Таблица\n");
+            gotoxy(0, 0);
+        }
+        else
+        {
+            gotoxy(40, 6);
+            printf("  Таблица\n");
+            gotoxy(0, 0);
+        }
+        if (Punckt == 2)
+        {
+            gotoxy(40, 8);
+            printf("  --> График\n");
+            gotoxy(0, 0);
+        }
+        else
+        {
+            gotoxy(40, 8);
+            printf("  График\n");
+            gotoxy(0, 0);
+        }
+        if (Punckt == 3)
+        {
+            gotoxy(40, 10);
+            printf("  --> Уравнение\n");
+            gotoxy(0, 0);
+        }
+        else
+        {
+            gotoxy(40, 10);
+            printf("  Уравнение\n");
+            gotoxy(0, 0);
+        }
+        if (Punckt == 4)
+        {
+            gotoxy(40, 12);
+            printf("  --> Интеграл\n");
+            gotoxy(0, 0);
+        }
+        else
+        {
+            gotoxy(40, 12);
+            printf("  Интеграл\n");
+            gotoxy(0, 0);
+        }
+        if (Punckt == 5)
+        {
+            gotoxy(40, 14);
+            printf("  --> Об авторе\n");
+            gotoxy(0, 0);
+        }
+        else
+        {
+            gotoxy(40, 14);
+            printf("  Об авторе\n");
+            gotoxy(0, 0);
+        }
+       /* if (Punckt == 1) printf("\t\n\t\n  --> Таблица\n");
         else             printf("\t\n\t\n   Таблица\n");
         if (Punckt == 2) printf("\t\n\t\n  --> График\n");
         else             printf("\t\n\t\n   График\n");
@@ -341,7 +397,7 @@ public:
         if (Punckt == 4) printf("\t\n\t\n  --> Интеграл\n");
         else             printf("\t\n\t\n   Интеграл\n");
         if (Punckt == 5) printf("\t\n\t\n  --> Об авторе\n");
-        else             printf("\t\n\t\n   Об авторе\n");
+        else             printf("\t\n\t\n   Об авторе\n");*/
 
     }
 };
