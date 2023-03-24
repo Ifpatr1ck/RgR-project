@@ -53,6 +53,15 @@ void tablica()
         x1[i] = x;
         x += dx;
     }
+    for (int i = 0; i < n; i++) { //seeking min and max of functions
+        minF1 = min(F1[i], minF1);
+        maxF1 = max(F1[i], maxF1);
+        if (F2[i] != -INFINITY) {
+            minF2 = min(F2[i], minF2);
+        }
+        maxF2 = max(F2[i], maxF2);
+    }
+
     for (int i = 1; i <= n; i++) {
         gotoxy(x2, y2 + 2 + i);
         SetConsoleTextAttribute(hStdOut, 11);
@@ -374,8 +383,20 @@ public:
     {
         system("cls");
         tablica();
-        gotoxy(47, 2);
-        cout << "Таблица иттераций";
+        gotoxy(48, 2);
+        cout << "Таблица иттераций:";
+        gotoxy(44, 4);
+        cout << "В таблице представлены значений иттераций следующих";
+        gotoxy(44, 5);
+        cout << "функций:";
+        gotoxy(44, 7);
+        cout << "Функция 1: 5 - 3cos(x)";
+        gotoxy(44, 8);
+        cout << "Функция 2: sqrt(e^x - 1)";
+        gotoxy(44, 10);
+        cout << "Красным цветом отмечены минимальные значения функций";
+        gotoxy(44, 11);
+        cout << "Зеленым цветом отмечены максимальные значения функций";
     }
 };
 class Graf
