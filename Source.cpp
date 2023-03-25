@@ -210,11 +210,11 @@ void Grafic() {
         }
         LPCWSTR w1 = L"5-3cos(x)";
         LPCWSTR w2 = L"sqrt(e^x - 1)";
-        TextOut(hdc, 460, 80, w1, 11);
+        TextOut(hdc, 100, 80, w1, 11);
         TextOut(hdc, 300, 60, w2, 15);
     }
     int n = 40000;
-    double F1[40000], F2[40000], x1[40000], x, dx, a = 0, b = 15, minF1 = 20000, maxF1 = -20000, minF2 = 20000, maxF2 = -20000;
+    double F1[40000], F2[40000], x1[40000], x, dx, a = 0, b = 6.28, minF1 = 20000, maxF1 = -20000, minF2 = 20000, maxF2 = -20000;
     dx = fabs(b - a) / (n - 1);//Increment of function, a,b - function interval
     x = a;
     for (int i = 0; i < n; i++) {
