@@ -34,6 +34,76 @@ void ConsoleCursorVisible(bool show, short size)
 } //Visible of Console Cursor
 HWND hwnd = GetConsoleWindow(); //Descripter of Window
 HDC dc = GetDC(hwnd);//Device context - for drawing
+void BackGround()
+{
+    SelectObject(dc, GetStockObject(DC_BRUSH));
+    SetDCBrushColor(dc, RGB(150, 205, 80)); // - цвет заполнителя
+    Rectangle(dc, 0, 0, 800, 400);
+} // Background of Animation 
+void Animation()
+{
+    system("mode con cols=100 lines=25"); //size of console
+    int x = 0, y = 0, N = 0, R = 0, G = 133, B = 0; // RGB is color, x,y - coordination
+    for (int i = 0; GetKeyState(VK_ESCAPE) >= 0; i++)
+    {
+        int PointWidth1 = 0, PointHigh1 = 0, PointWidth2 = 100 + N, PointHigh2 = 100 + N / 4, Speed = 20; // Speed is how quickly rectangle is running
+        if (x == 0 && y == 0)
+        {
+            for (int j = 0; j <= 800 - PointWidth2; j += Speed)
+            {
+                BackGround(); //Function of background color
+                //running rectangle
+                SelectObject(dc, GetStockObject(DC_BRUSH));
+                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
+                Rectangle(dc, PointWidth1 + j, PointHigh1, PointWidth2 + j, PointHigh2);
+                Sleep(10);
+            }
+            y++; //move to the next step
+        } // Animation of moving left to right
+        if (x == 0 && y == 1)
+        {
+            for (int k = 0; k <= 400 - PointHigh2; k += Speed)
+            {
+                BackGround();
+                //running rectangle
+                SelectObject(dc, GetStockObject(DC_BRUSH));
+                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
+                Rectangle(dc, 800 - PointWidth2, PointHigh1 + k, 800, PointHigh2 + k);
+                Sleep(10);
+            }
+            x++;
+        }// Animation of moving upper to bottom
+        if (x == 1 && y == 1)
+        {
+            for (int j = 0; j <= 800 - PointWidth2; j += Speed)
+            {
+                BackGround();
+                //running rectangle
+                SelectObject(dc, GetStockObject(DC_BRUSH));
+                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
+                Rectangle(dc, 800 - PointWidth2 - j, 400 - PointHigh2, 800 - j, 400);
+                Sleep(10);
+            }
+            y--;
+        } // Animation of moving right to left
+        if (x == 1 && y == 0)
+        {
+            int j = 0;
+            for (; j < 400 + Speed - PointHigh2; j += Speed)
+            {
+                BackGround();
+                //running rectangle
+                SelectObject(dc, GetStockObject(DC_BRUSH));
+                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
+                Rectangle(dc, PointWidth1, 400 - PointHigh2 - j, PointWidth2, 400 - j);
+                Sleep(10);
+                if (j >= (400 - PointHigh2)) N += 100;
+            }
+            x--;
+        } // Animation of moving bottom to upper
+        if (PointWidth2 >= 800 && PointHigh2 >= 400) break;
+    }
+} // Animation of start the programm
 void tablica()
 {
     system("color 4"); //Color of text
@@ -106,7 +176,7 @@ void tablica()
     gotoxy(x2, y2 + 3 + n);
     cout << "|___|________|________|________| \n";
 }
-void Charts() {
+void Grafic() {
     system("color 2"); //Color of text
     HWND hwn = GetConsoleWindow();
     COLORREF lineColor = RGB(0, 0, 0);
@@ -231,76 +301,6 @@ double rectangelIntegral(double a, double b, double n) {
     sum *= h / 3;
     return sum;
 } // Sympson's method // not need
-void BackGround()
-{
-    SelectObject(dc, GetStockObject(DC_BRUSH));
-    SetDCBrushColor(dc, RGB(150, 205, 80)); // - цвет заполнителя
-    Rectangle(dc, 0, 0, 800, 400);
-} // Background of Animation 
-void Animation()
-{
-    system("mode con cols=100 lines=25"); //size of console
-    int x = 0, y = 0, N = 0, R = 0, G = 133, B = 0; // RGB is color, x,y - coordination
-    for (int i = 0; GetKeyState(VK_ESCAPE) >= 0; i++)
-    {
-        int PointWidth1 = 0, PointHigh1 = 0, PointWidth2 = 100 + N, PointHigh2 = 100 + N / 4,Speed = 20; // Speed is how quickly rectangle is running
-        if (x == 0 && y == 0)
-        {
-            for (int j = 0; j <= 800 - PointWidth2; j += Speed)
-            {
-                BackGround(); //Function of background color
-                //running rectangle
-                SelectObject(dc, GetStockObject(DC_BRUSH));
-                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
-                Rectangle(dc, PointWidth1 + j, PointHigh1, PointWidth2 + j, PointHigh2);
-                Sleep(10);
-            }
-            y++; //move to the next step
-        } // Animation of moving left to right
-        if (x == 0 && y == 1)
-        {
-            for (int k = 0; k <= 400 - PointHigh2; k += Speed)
-            {
-                BackGround();
-                //running rectangle
-                SelectObject(dc, GetStockObject(DC_BRUSH));
-                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
-                Rectangle(dc, 800 - PointWidth2, PointHigh1 + k, 800, PointHigh2 + k);
-                Sleep(10);
-            }
-            x++;
-        }// Animation of moving upper to bottom
-        if (x == 1 && y == 1)
-        {
-            for (int j = 0; j <= 800 - PointWidth2; j += Speed)
-            {
-                BackGround();
-                //running rectangle
-                SelectObject(dc, GetStockObject(DC_BRUSH));
-                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
-                Rectangle(dc, 800 - PointWidth2 - j, 400 - PointHigh2, 800 - j, 400);
-                Sleep(10);
-            }
-            y--;
-        } // Animation of moving right to left
-        if (x == 1 && y == 0)
-        {
-            int j = 0;
-            for (; j < 400 + Speed - PointHigh2; j += Speed)
-            {
-                BackGround();
-                //running rectangle
-                SelectObject(dc, GetStockObject(DC_BRUSH));
-                SetDCBrushColor(dc, RGB(R, G, B)); // - Color of placeholder
-                Rectangle(dc, PointWidth1, 400 - PointHigh2 - j, PointWidth2, 400 - j);
-                Sleep(10);
-                if (j >= (400 - PointHigh2)) N += 100;
-            }
-            x--;
-        } // Animation of moving bottom to upper
-        if (PointWidth2 >= 800 && PointHigh2 >= 400) break;
-    }
-} // Animation of start the programm
 class Menu //Menu
 {
 public:
@@ -431,7 +431,7 @@ public:
     void draw()
     {
         system("cls");
-        Charts();
+        Grafic();
     }
 };
 class Yravn
