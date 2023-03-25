@@ -483,7 +483,7 @@ public:
         AboutME(); //Function with information about author
      }
 };
-class exit1
+class quit
 {
 public:
     void draw()
@@ -527,8 +527,8 @@ int main()
                 author.draw();
                 break;
             case 6: 
-                exit1 exit1;
-                exit1.draw();
+                quit exit;
+                exit.draw();
                 break;
             default:
                 break;
