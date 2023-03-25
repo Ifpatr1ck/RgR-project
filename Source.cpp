@@ -36,7 +36,7 @@ HWND hwnd = GetConsoleWindow(); //Descripter of Window
 HDC dc = GetDC(hwnd);//Device context - for drawing
 void tablica()
 {
-    system("color 2"); //Color of text
+    system("color 4"); //Color of text
     int n = 20,x2 = 5, y2 = 0; //n - count of iteration, x2,y2 - coordinates of position the table
     double F1[20], F2[20], x, dx, x1[20], a = 0, b = 2*Pi, minF1 = INT_MAX, maxF1 = INT_MIN, minF2 = INT_MAX, maxF2 = INT_MIN;
     dx = fabs(b - a) / (n - 1); //Increment of function, a,b - function interval
@@ -64,10 +64,10 @@ void tablica()
 
     for (int i = 1; i <= n; i++) {
         gotoxy(x2, y2 + 2 + i);
-        SetConsoleTextAttribute(hStdOut, 11);
+        SetConsoleTextAttribute(hStdOut, 4);
         printf("|%3d|%8.3f|", i, x1[i - 1]);
         if (F1[i - 1] == minF1) {
-            SetConsoleTextAttribute(hStdOut, 4);
+            SetConsoleTextAttribute(hStdOut, 1);
             printf("%8.4f", F1[i - 1]);
         }
         else if (F1[i - 1] == maxF1) {
@@ -76,13 +76,13 @@ void tablica()
         }
         else
         {
-            SetConsoleTextAttribute(hStdOut, 11);
+            SetConsoleTextAttribute(hStdOut, 4);
             printf("%8.4f", F1[i - 1]);
         }
-        SetConsoleTextAttribute(hStdOut, 11);
+        SetConsoleTextAttribute(hStdOut, 4);
         printf("|");
         if (F2[i - 1] == minF2) {
-            SetConsoleTextAttribute(hStdOut, 4);
+            SetConsoleTextAttribute(hStdOut, 1);
             printf("%8.4f", F2[i - 1]);
         }
         else if (F2[i - 1] == maxF2) {
@@ -92,15 +92,15 @@ void tablica()
         else
         {
             if (F2[i - 1] == -INFINITY) {
-                SetConsoleTextAttribute(hStdOut, 11);
+                SetConsoleTextAttribute(hStdOut, 4);
                 printf("%8s", "ERROR");
             }
             else {
-                SetConsoleTextAttribute(hStdOut, 11);
+                SetConsoleTextAttribute(hStdOut, 4);
                 printf("%8.4f", F2[i - 1]);
             }
         }
-        SetConsoleTextAttribute(hStdOut, 11);
+        SetConsoleTextAttribute(hStdOut, 4);
         printf("|\n");
     }
     gotoxy(x2, y2 + 3 + n);
@@ -174,12 +174,24 @@ double HalfDivEquation(double a, double b, double e) {
     return c;
 }//Solving the Equation by the Half-devision Method
 void AboutME() {
-    gotoxy(30, 1);
-    cout << "  Расчётно-графическую работу" << endl;
-    gotoxy(30, 2);
-    cout << "выполнил студент группы ПИН-221" << endl;
-    gotoxy(30, 3);
-    cout << "    Кит Денис Владимирович" << endl;
+    gotoxy(8, 2);
+    cout << "Информация об авторе программы:";
+    gotoxy(5, 4);
+    cout << "Тип работы: расчетно-графическая работа";
+    gotoxy(5, 5);
+    cout << "название дисциплины: программирование";
+    gotoxy(8, 7);
+    cout << "выполнил работу:";
+    gotoxy(5, 9);
+    cout << "Студент Омского Государственного Технического Университета";
+    gotoxy(5, 10);
+    cout << "факультета информационных технологий и компьютерных систем";
+    gotoxy(5, 11);
+    cout << "Кит Денис Владимирович, группы ПИН-221";
+    gotoxy(5, 12);
+    cout << "по направлению \"Программная инженерия\", код направления: 09.03.04 ";
+    gotoxy(8, 14);
+    cout << "Год выполнения: 2023";
 } //Function, which can talking about author
 double FunctionIntegral(double x) {
     return pow(e, (-x)) * log(x + 1);
@@ -300,11 +312,11 @@ public:
         switch (num)
         {
         case 80: // down
-            if (Punckt >= 5) Punckt = 1;
+            if (Punckt >= 6) Punckt = 1;
             else Punckt++;
             break;
         case 72: // up
-            if (Punckt <= 1) Punckt = 5;
+            if (Punckt <= 1) Punckt = 6;
             else Punckt--;
             break;
         default:
@@ -374,6 +386,18 @@ public:
             printf("  Об авторе\n");
             gotoxy(0, 0);
         }
+        if (Punckt == 6) //animation of choice
+        {
+            gotoxy(40, 16);
+            printf("  --> Выход\n");
+            gotoxy(0, 0);
+        }
+        else //animation of choice
+        {
+            gotoxy(40, 16);
+            printf("  Выход\n");
+            gotoxy(0, 0);
+        }
     }
 };
 class Table //Table of function
@@ -383,19 +407,21 @@ public:
     {
         system("cls");
         tablica();
-        gotoxy(48, 2);
+        gotoxy(48, 6);
         cout << "Таблица иттераций:";
-        gotoxy(44, 4);
-        cout << "В таблице представлены значений иттераций следующих";
-        gotoxy(44, 5);
-        cout << "функций:";
-        gotoxy(44, 7);
-        cout << "Функция 1: 5 - 3cos(x)";
         gotoxy(44, 8);
-        cout << "Функция 2: sqrt(e^x - 1)";
-        gotoxy(44, 10);
-        cout << "Красным цветом отмечены минимальные значения функций";
+        cout << "В таблице представлены значений иттераций следующих";
+        gotoxy(44, 9);
+        cout << "функций:";
         gotoxy(44, 11);
+        cout << "Функция 1: 5 - 3cos(x)";
+        gotoxy(44, 12);
+        cout << "Функция 2: sqrt(e^x - 1)";
+        gotoxy(44, 13);
+        cout << "Интервал функций: [0,2Пи]";
+        gotoxy(44, 15);
+        cout << "Синим цветом отмечены минимальные значения функций";
+        gotoxy(44, 16);
         cout << "Зеленым цветом отмечены максимальные значения функций";
     }
 };
@@ -414,7 +440,16 @@ public:
     void draw()
     {
         system("cls");
-        cout << "\n\tКорень уравнения, решенное методом половинного деления равен: " << HalfDivEquation(1.4, Pi / 2, 0.001);
+        gotoxy(6, 1);
+        cout << "Решение уравнения";
+        gotoxy(4, 3);
+        cout << "Уравнение: tg(x) - e^(x+1)";
+        gotoxy(4, 4);
+        cout << "Предлогаемое решение: метод половинного деления";
+        gotoxy(4, 5);
+        cout << "Интервал решения уравнения: [1,Пи/2]";
+        gotoxy(4, 6);
+        cout << "Результат: корень уравнения равен " << HalfDivEquation(1, Pi / 2, 0.001);
     }
 };
 class Integral
@@ -423,8 +458,20 @@ public:
     void draw()
     {
         system("cls");
-        cout << "\n\tИнтеграл, решенный методом трапеций равен: " << trapezoidalIntegral(2.0, 5.0, 200);
-        cout << "\n\tИнтеграл, решенный методом прямоугольников равен: " << rectangelIntegral(2.0, 5.0, 200);
+        gotoxy(6,1);
+        cout << "Решение определенного интеграла";
+        gotoxy(4, 3);
+        cout << "Предложенный интеграл: e^(-x) * ln(x+1)";
+        gotoxy(4, 4);
+        cout << "Верхний предел интеграла: 5.0";
+        gotoxy(4, 5);
+        cout << "Нижний предел интеграла: 2.0";
+        gotoxy(4, 6);
+        cout << "Цена приращения: 3/200";
+        gotoxy(4, 7);
+        cout << "Результат, полученный методом трапеций равен: " << trapezoidalIntegral(2.0, 5.0, 200);
+        gotoxy(4, 8);
+        cout << "Результат, полученный методом прямоугольников равен: " << rectangelIntegral(2.0, 5.0, 200);
     }
 };
 class Author
@@ -435,6 +482,14 @@ public:
         system("cls");
         AboutME(); //Function with information about author
      }
+};
+class exit1
+{
+public:
+    void draw()
+    {
+        exit(0);
+    }
 };
 int main()
 {
@@ -470,6 +525,10 @@ int main()
             case 5: //Case about author
                 Author author;
                 author.draw();
+                break;
+            case 6: 
+                exit1 exit1;
+                exit1.draw();
                 break;
             default:
                 break;
