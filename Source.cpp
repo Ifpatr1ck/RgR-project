@@ -488,7 +488,7 @@ class quit
 public:
     void draw()
     {
-        exit(0);
+        exit(0); //exit
     }
 };
 int main()
@@ -526,7 +526,7 @@ int main()
                 Author author;
                 author.draw();
                 break;
-            case 6: 
+            case 6: //Case to exit
                 quit exit;
                 exit.draw();
                 break;
